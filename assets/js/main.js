@@ -3,33 +3,24 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
-function moreLess(initiallyVisibleCharacters) {
-	var visibleCharacters = initiallyVisibleCharacters;
-	var paragraph = $(".text")
-	
+// Hide the extra content initially, using JS so that if JS is disabled, no problemo:
+$('.read-more-content').addClass('hide')
+$('.read-more-show, .read-more-hide').removeClass('hide')
 
-	paragraph.each(function() {
-		var text = $(this).text();
-		var wholeText = text.slice(0, visibleCharacters) + "<span class='ellipsis'>... </span><a href='#' class='more'>Skaityti daugiau</a>" + "<span style='display:none'>" + text.slice(visibleCharacters, text.length) + "<a href='#' class='less'> Skaityti mažiau</a></span>"
-		
-		if (text.length < visibleCharacters) {
-			return
-		} else {
-			$(this).html(wholeText)
-		}
-	});
-	$(".more").click(function(e) {
-		e.preventDefault();
-		$(this).hide().prev().hide();
-		$(this).next().show();
-	});
-	$(".less").click(function(e) {
-		e.preventDefault();
-		$(this).parent().hide().prev().show().prev().show();
-	});
-};
+// Set up the toggle effect:
+$('.read-more-show').on('click', function(e) {
+  $(this).next('.read-more-content').removeClass('hide');
+  $(this).addClass('hide');
+  e.preventDefault();
+});
 
-moreLess(451);
+// Changes contributed by @diego-rzg
+$('.read-more-hide').on('click', function(e) {
+  var p = $(this).parent('.read-more-content');
+  p.addClass('hide');
+  p.prev('.read-more-show').removeClass('hide'); // Hide only the preceding "Read More"
+  e.preventDefault();
+});
 
 (function($) {
 
