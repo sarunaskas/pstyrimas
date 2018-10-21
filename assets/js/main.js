@@ -3,30 +3,33 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
-$(document).ready(function(){
-	$('p').each(function(){
-var trimLength = 450;
-var trimMargin = 1.2; // don't trim just a couple of words
-if($(this).text().length > (trimLength * trimMargin)) {
-var text = $(this).text();
-var trimPoint = $(this).text().indexOf(" ", trimLength);
-var newContent = text.substring(0, trimPoint)+'<span class="read-more">'+text.substring(trimPoint)+'</span><span class="toggle"> <a href="#">Skaityti daugiau</a></span>';
-$(this).html(newContent);
-}
-});
-$('.toggle a').click(function(e){
-e.preventDefault();
-var para = $(this).closest('p');
-var initialHeight = $(this).closest('p').innerHeight();
-para.find('.read-more').show();
-para.find('.toggle').hide();
-var newHeight = para.innerHeight();
-para.css('max-height', initialHeight+'px');
-para.animate({ maxHeight: newHeight }, 300, function(){
-para.css('max-height', 'none');
-});
-});
-});
+function moreLess(initiallyVisibleCharacters) {
+	var visibleCharacters = initiallyVisibleCharacters;
+	var paragraph = $(".text")
+	
+
+	paragraph.each(function() {
+		var text = $(this).text();
+		var wholeText = text.slice(0, visibleCharacters) + "<span class='ellipsis'>... </span><a href='#' class='more'>Skaityti daugiau</a>" + "<span style='display:none'>" + text.slice(visibleCharacters, text.length) + "<a href='#' class='less'> Skaityti mažiau</a></span>"
+		
+		if (text.length < visibleCharacters) {
+			return
+		} else {
+			$(this).html(wholeText)
+		}
+	});
+	$(".more").click(function(e) {
+		e.preventDefault();
+		$(this).hide().prev().hide();
+		$(this).next().show();
+	});
+	$(".less").click(function(e) {
+		e.preventDefault();
+		$(this).parent().hide().prev().show().prev().show();
+	});
+};
+
+moreLess(451);
 
 (function($) {
 
